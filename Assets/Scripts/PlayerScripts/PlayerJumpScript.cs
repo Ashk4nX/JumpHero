@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerJumpScript : MonoBehaviour {
 
@@ -8,12 +9,15 @@ public class PlayerJumpScript : MonoBehaviour {
 
 	private Rigidbody2D MyRigidBody;
 	private Animator anim;
+	private Slider PowerBar;
 
 	[SerializeField]
 	private float ForceX, ForceY;
 
 	private float ThresholdX = 7f;
 	private float ThresholdY = 14f;
+	private float PowerBarThreshold = 10f;
+	private float PowerBarValue = 0f;
 
 	private bool setPower, didJump;
 
@@ -31,6 +35,11 @@ public class PlayerJumpScript : MonoBehaviour {
 
 		MyRigidBody = gameObject.GetComponent<Rigidbody2D>();
 		anim = gameObject.GetComponent<Animator>();
+		PowerBar = GameObject.Find("Slider").GetComponent<Slider>();
+
+		PowerBar.minValue = 0f;
+		PowerBar.maxValue = 10f;
+		PowerBar.value = PowerBarValue;
 
 	}
 
@@ -71,6 +80,10 @@ public class PlayerJumpScript : MonoBehaviour {
 		
 				ForceY = 13.5f;
 			}
+
+			PowerBarValue += PowerBarThreshold * Time.deltaTime;
+			PowerBar.value = PowerBarValue;
+
 		}
 
 	}
@@ -81,6 +94,7 @@ public class PlayerJumpScript : MonoBehaviour {
 		MyRigidBody.velocity = new Vector2(ForceX, ForceY);
 		ForceX = ForceY = 0f;
 		didJump = true;
+		anim.SetBool ("Jump", didJump);
 
 	}
 
@@ -109,6 +123,8 @@ public class PlayerJumpScript : MonoBehaviour {
 
 			didJump = false;
 
+			anim.SetBool ("Jump", didJump);
+
 			if (target.tag == "Platform") {
 
 				if (GameManager.Instance != null) {
@@ -120,6 +136,12 @@ public class PlayerJumpScript : MonoBehaviour {
 				if (ScoreManager.Instance != null) {
 
 					ScoreManager.Instance.IncrementScore ();
+
+				}
+
+				if (SFxPlayer.Instance != null) {
+
+					SFxPlayer.Instance.PlaySound ();
 
 				}
 
