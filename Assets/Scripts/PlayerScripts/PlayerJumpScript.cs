@@ -92,9 +92,10 @@ public class PlayerJumpScript : MonoBehaviour {
 	{
 
 		MyRigidBody.velocity = new Vector2(ForceX, ForceY);
-		ForceX = ForceY = 0f;
+		ForceX = ForceY = PowerBarValue = 0f;
 		didJump = true;
 		anim.SetBool ("Jump", didJump);
+		PowerBar.value = PowerBarValue;
 
 	}
 
