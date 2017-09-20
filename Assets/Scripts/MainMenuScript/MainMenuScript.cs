@@ -12,4 +12,12 @@ public class MainMenuScript : MonoBehaviour {
 
 	}
 
+	public void QuitTheGame ()
+	{
+
+		Application.Quit ();
+		Debug.Log ("QUIT");
+
+	}
+
 }
